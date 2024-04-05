@@ -12,7 +12,7 @@ const THRESHOLD_PERCENTAGE = 40;
 // Extracts and returns the price from a list of possible elements.
 export function extractPrice(...elements: any) {
   for (const element of elements) {
-    console.log("ELEMENT:::", element.text());
+    // console.log("ELEMENT:::", element.text());
     const priceText = element.text().trim();
 
     if (priceText) {
@@ -63,7 +63,7 @@ export function extractDescription($: any) {
 
 export function extractStarRating(...elements: any) {
   for (const element of elements) {
-    console.log("IMRIGHTHERE", element.text());
+    // console.log("IMRIGHTHERE", element.text());
     const ratingText = element.text().trim();
 
     // Reg exp to extract the rating number
