@@ -2,12 +2,7 @@
 
 import axios from "axios";
 import * as cheerio from "cheerio";
-import {
-  extractCurrency,
-  extractDescription,
-  extractPrice,
-  extractStarRating,
-} from "../utils";
+import { extractCurrency, extractDescription, extractPrice } from "../utils";
 
 export async function scrapeAmazonProduct(url: string) {
   if (!url) return;
@@ -35,24 +30,40 @@ export async function scrapeAmazonProduct(url: string) {
 
     // Extract the product title
     const title = $("#productTitle").text().trim();
+    // const currentPrice = extractPrice(
+    //       $(".priceToPay span.a-price-whole"),
+    //       $(".a.size.base.a-color-price"),
+    //       $(".a-button-selected"),
+    //       $(".a-color-base"),
+    //       $(".a-offscreen")
+    //     );
     const currentPrice = extractPrice(
-      $(".priceToPay span.a-price-whole"),
+      $("span.a-price-whole"),
+      $(".priceToPay"),
       $(".a.size.base.a-color-price"),
-      $(".a-button-selected"),
       $(".a-color-base"),
-      $(".a-offscreen")
+      $(".a-button-selected"),
+      $("span.aok-offscreen")
     );
 
+    // const originalPrice = extractPrice(
+    //       $("#priceblock_ourprice"),
+    //       $(".a-price.a-text-price"),
+    //       $("#listPrice"),
+    //       $("span.a-offscreen"),
+    //       $("#priceblock_dealprice"),
+    //       $(".a-size-base.a-color-price")
+    //     );
     const originalPrice = extractPrice(
       $("#priceblock_ourprice"),
       $(".a-price.a-text-price"),
-      $("#listPrice"),
       $("span.a-offscreen"),
+      $("#listPrice"),
       $("#priceblock_dealprice"),
       $(".a-size-base.a-color-price")
     );
 
-    const isOutOfStock =
+    const outOfStock =
       $("#availability span").text().trim().toLowerCase() ===
       "currently unavailable";
 
@@ -68,22 +79,6 @@ export async function scrapeAmazonProduct(url: string) {
 
     const description = extractDescription($);
 
-    // const starRating = extractStarRating(
-    //   $('[data-hook="acr-average-stars-rating-text"]'),
-    //   $('[data-hook="average-stars-rating-anywhere"]')
-    // );
-    const starRating = $('[data-hook="acr-average-stars-rating-text"]')
-      .text()
-      .trim();
-
-    // console.log("DATA", response.data, {
-    //   title,
-    //   currentPrice,
-    //   originalPrice,
-    //   isOutOfStock,
-    //   imageUrls,
-    //   starRating,
-    // });
     // Construct data object with scraped information
     const data = {
       url,
@@ -97,13 +92,13 @@ export async function scrapeAmazonProduct(url: string) {
       category: "category",
       reviewCount: 100,
       stars: 4.5,
-      isOutOfStock: isOutOfStock,
+      isOutOfStock: outOfStock,
       description,
       lowestPrice: Number(currentPrice) || Number(originalPrice),
       highestPrice: Number(originalPrice) || Number(currentPrice),
       averagePrice: Number(currentPrice) || Number(originalPrice),
     };
-    // console.log("FINAL DATA::", data);
+
     return data;
   } catch (error: any) {
     console.log(error);

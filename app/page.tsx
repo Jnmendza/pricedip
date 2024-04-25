@@ -23,7 +23,7 @@ const Home = async () => {
               />
             </p>
             <h1 className='head-text'>
-              Unleash the Power of
+              Dip into all the savings with
               <span className='text-primary'> PriceDip</span>
             </h1>
             <p className='mt-6'>

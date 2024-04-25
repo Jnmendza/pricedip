@@ -7,6 +7,7 @@ import { Product } from "@/types";
 import { formatNumber } from "@/lib/utils";
 import PriceInfoCard from "@/components/PriceInfoCard";
 import ProductCard from "@/components/ProductCard";
+import Modal from "@/components/Modal";
 
 type Props = {
   params: { id: string };
@@ -14,8 +15,8 @@ type Props = {
 
 const ProductDetails = async ({ params: { id } }: Props) => {
   const product: Product = await getProductById(id);
-  console.log("PRODUCT::::", product);
   if (!product) redirect("/");
+  console.log("PRODUCT::::", product);
 
   const similarProducts = await getSimilarProducts(id);
 
@@ -158,7 +159,7 @@ const ProductDetails = async ({ params: { id } }: Props) => {
               />
             </div>
           </div>
-          Modal
+          <Modal productId={id} />
         </div>
       </div>
 
